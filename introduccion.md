@@ -214,6 +214,7 @@ La POO es importante porque facilita:
 
 Este es el boceto inicial del diseño de clases, incrustado como una imagen y con un enlace para su visualización.
 
+![Boceto de Diagrama UML del sistema](/imagendebocetoUMLdelsistema/Diagram%202025-05-02%2010-33-22.png)
 
 [Enlace para visualizar el boceto en línea](https://1drv.ms/i/c/f2bf844ed8279638/EYWt67Y45_hOi_NOFG8invUBEwNZQJin11c6xzvQbu9xDw?e=DtGMKS)
 
