@@ -194,6 +194,8 @@ Al segregar las interfaces, hemos evitado que los clientes dependan de métodos 
 
 # Estructura de Clase
 
+![Diagrama ISP](/imagenesPricipioSolid/DiagramaDeClaseISP.png)
+
 [Enlace al diagrama](https://1drv.ms/i/c/f2bf844ed8279638/EUQs5HM9M0JCpx8CElgtQ1wB1fXSZxADNqY1a5NGTm_b-g?e=G9Opkr)
 
 ```Java

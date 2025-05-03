@@ -139,6 +139,8 @@ Este principio es clave para construir sistemas escalables y eficientes. 🚀
 Al separar la responsabilidad de la persistencia en la clase `PacienteRepository`, la clase `Paciente` ahora tiene una única razón para cambiar: cuando la información o la lógica de negocio del paciente cambian. Los cambios en la tecnología de la base de datos o en la forma en que se almacenan los datos afectarán únicamente a la clase `PacienteRepository`. Esto hace que ambas clases sean más cohesivas, menos acopladas y más fáciles de mantener.
 
 # Estructura de clase
+![Diagrama SRP](/imagenesPricipioSolid/DiagramaUMLPrincipioSOLIDSRP.png)
+
 [Enlace al diagrama UML Clas](https://1drv.ms/i/c/f2bf844ed8279638/EVZpKLHrUJtKtVFQPTpXhUkBOzl7YzhMQaMSNI5MiUklaw?e=mepCwR)
 
 ¡Hola desde Haedo! ¡Excelente! Aquí tienes un archivo Markdown (.md) con una breve descripción de cada Diagrama UML que construimos para ilustrar los principios SOLID, junto con código Java interpolado para dar más fundamento a cada diagrama:

@@ -107,6 +107,8 @@ De esta manera, si más adelante se agrega **PagoApplePay**, simplemente se impl
 
 # Estructura de clase
 
+![Diagrama OCP](/imagenesPricipioSolid/DiagramaUMLOCP.png)
+
 [Enlace al diagrama](https://1drv.ms/i/c/f2bf844ed8279638/ES64Rd_IsAFEk3MIj9-K1AUBg8IToBsY1gjqDDt0uwj_Cw?e=bOrWam)
 
 ```Java

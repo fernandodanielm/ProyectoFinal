@@ -163,6 +163,7 @@ De esta manera, todas las clases **pueden sustituir a su superclase sin romper e
 Con este diseño, para agregar una nueva validación (por ejemplo, validar el formato del teléfono), simplemente creamos una nueva clase `ValidadorFormatoTelefono` que implementa `ValidadorPaciente`. No necesitamos modificar la interfaz `ValidadorPaciente` ni la clase `ServicioValidacionPaciente`. El sistema está abierto a la extensión (añadiendo nuevos validadores) pero cerrado a la modificación (el código existente de validación no se altera).
 
 # Estructura de clases
+![Diagrama LSP](/imagenesPricipioSolid/DiagramaUMLCLASSLSP.png)
 
 [Enlace al diagrama](https://1drv.ms/i/c/f2bf844ed8279638/EXEWyxYQ8WFMk6L96LrVnHEBWdSbrLSywJGnKO4IS3zHFA?e=9OWqtb)
 

@@ -193,6 +193,8 @@ Ahora, si más adelante se necesita agregar **Apple Pay**, simplemente se crea `
 Con este diseño, `AgendaTurnos` (el módulo de alto nivel) depende de la abstracción `ITurnoRepository`, y las implementaciones concretas (`MySQLTurnoRepository`, `PostgreSQLTurnoRepository` - módulos de bajo nivel) también dependen de la misma abstracción. Esto desacopla la lógica de negocio de la gestión de turnos de la implementación específica de la persistencia. Ahora podemos cambiar la base de datos simplemente proporcionando una nueva implementación de `ITurnoRepository` a la clase `AgendaTurnos` sin necesidad de modificar su código fuente. Esto hace que el sistema sea más flexible, robusto y fácil de adaptar a futuros cambios en la infraestructura de persistencia.
 
 # Estructura de clase
+![Imagen del Diagrama](/imagenesPricipioSolid/DiagramaUMLDIP.png)
+
 [Enlace al diagrama](https://1drv.ms/i/c/f2bf844ed8279638/EUXqanLyl-BOol_rll1-ALIBQ5VCTZKi72L1RKZ3L7WKfQ?e=jRmjeb)
 
 ```Java
