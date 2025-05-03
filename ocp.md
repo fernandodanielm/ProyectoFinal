@@ -104,3 +104,42 @@ De esta manera, si más adelante se agrega **PagoApplePay**, simplemente se impl
     **Resultado:**
 
     Al seguir este enfoque, hemos extendido la funcionalidad de notificación de nuestro sistema para incluir SMS sin necesidad de alterar el código existente de la interfaz `ServicioNotificacion` o la clase `AgendaTurnos`. Simplemente creamos una nueva clase (`SMSNotificador`) que se adhiere a la interfaz ya definida. Esto cumple con el Principio de Abierto/Cerrado: el sistema está abierto a la extensión (añadiendo nuevos métodos de notificación) pero cerrado a la modificación (el código base para la notificación no se cambia). Esto facilita la adición de futuras formas de notificación (como notificaciones push o por WhatsApp) de la misma manera, haciendo que el sistema sea más flexible y mantenible.
+
+# Estructura de clase
+
+[Enlace al diagrama](https://1drv.ms/i/c/f2bf844ed8279638/ES64Rd_IsAFEk3MIj9-K1AUBg8IToBsY1gjqDDt0uwj_Cw?e=bOrWam)
+
+```Java
+interface ValidadorPaciente {
+    boolean esValido(Paciente paciente);
+}
+
+class ValidadorFormatoDocumento implements ValidadorPaciente {
+    @Override
+    public boolean esValido(Paciente paciente) {
+        return paciente.getNumeroDocumento() != null && paciente.getNumeroDocumento().matches("\\d{8}");
+    }
+}
+
+class ServicioValidacionPaciente {
+    public boolean esPacienteValido(Paciente paciente, List<ValidadorPaciente> validadores) {
+        for (ValidadorPaciente validador : validadores) {
+            if (!validador.esValido(paciente)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+class Paciente {
+    private String numeroDocumento;
+    // ... otros atributos ...
+
+    public boolean esValido(List<ValidadorPaciente> validadores) {
+        ServicioValidacionPaciente validatorService = new ServicioValidacionPaciente();
+        return validatorService.esPacienteValido(this, validadores);
+    }
+}
+
+Descripción: El Principio de Abierto/Cerrado establece que las entidades de software deben estar abiertas para la extensión, pero cerradas para la modificación. Aquí, la validación de Paciente se extiende creando nuevas clases que implementan ValidadorPaciente, sin modificar las clases existentes

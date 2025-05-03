@@ -191,3 +191,40 @@ De esta manera, **cada vehículo implementa solo la interfaz que le corresponde*
 **Resultado:**
 
 Al segregar las interfaces, hemos evitado que los clientes dependan de métodos que no utilizan. Esto reduce el acoplamiento entre las clases y las interfaces, haciendo que el sistema sea más flexible, mantenible y fácil de refactorizar. Cada interfaz tiene un propósito específico, lo que mejora la cohesión y la comprensión del diseño.
+
+# Estructura de Clase
+
+[Enlace al diagrama](https://1drv.ms/i/c/f2bf844ed8279638/EUQs5HM9M0JCpx8CElgtQ1wB1fXSZxADNqY1a5NGTm_b-g?e=G9Opkr)
+
+```Java
+interface InfoBasicaProfesional {
+    String getNombreCompleto();
+    String getNumeroDocumento();
+}
+
+interface InfoAgendaProfesional {
+    String getHorarioAtencion();
+}
+
+class Medico implements InfoBasicaProfesional, InfoAgendaProfesional, InfoMedico {
+    private String nombreCompleto;
+    private String numeroDocumento;
+    private String horarioAtencion;
+    private String especialidad;
+
+    @Override
+    public String getNombreCompleto() { return nombreCompleto; }
+    @Override
+    public String getNumeroDocumento() { return numeroDocumento; }
+    @Override
+    public String getHorarioAtencion() { return horarioAtencion; }
+    public String getEspecialidad() { return especialidad; }
+}
+
+class AgendaTurnos {
+    public void asignarTurno(Paciente paciente, InfoAgendaProfesional profesional, LocalDateTime fechaHora, String motivo) {
+        System.out.println("Turno asignado a: " + profesional.getHorarioAtencion());
+    }
+}
+
+Descripción: El Principio de Segregación de Interfaces establece que ninguna clase cliente debería ser forzada a depender de métodos que no utiliza. Aquí, se definen interfaces específicas (InfoBasicaProfesional, InfoAgendaProfesional, InfoMedico, InfoEnfermero) para los diferentes clientes de ProfesionalSalud.

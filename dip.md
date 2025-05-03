@@ -191,3 +191,42 @@ Ahora, si más adelante se necesita agregar **Apple Pay**, simplemente se crea `
 **Resultado:**
 
 Con este diseño, `AgendaTurnos` (el módulo de alto nivel) depende de la abstracción `ITurnoRepository`, y las implementaciones concretas (`MySQLTurnoRepository`, `PostgreSQLTurnoRepository` - módulos de bajo nivel) también dependen de la misma abstracción. Esto desacopla la lógica de negocio de la gestión de turnos de la implementación específica de la persistencia. Ahora podemos cambiar la base de datos simplemente proporcionando una nueva implementación de `ITurnoRepository` a la clase `AgendaTurnos` sin necesidad de modificar su código fuente. Esto hace que el sistema sea más flexible, robusto y fácil de adaptar a futuros cambios en la infraestructura de persistencia.
+
+# Estructura de clase
+[Enlace al diagrama](https://1drv.ms/i/c/f2bf844ed8279638/EUXqanLyl-BOol_rll1-ALIBQ5VCTZKi72L1RKZ3L7WKfQ?e=jRmjeb)
+
+```Java
+interface ITurnoRepository {
+    void guardarTurno(Turno turno);
+    Turno cargarTurno(int idTurno);
+}
+
+class MySQLTurnoRepository implements ITurnoRepository {
+    @Override
+    public void guardarTurno(Turno turno) {
+        // Lógica para guardar en MySQL
+    }
+    @Override
+    public Turno cargarTurno(int idTurno) {
+        // Lógica para cargar desde MySQL
+        return new Turno(/* ... */);
+    }
+}
+
+class AgendaTurnos {
+    private final ITurnoRepository turnoRepository;
+
+    public AgendaTurnos(ITurnoRepository turnoRepository) {
+        this.turnoRepository = turnoRepository;
+    }
+
+    public void asignarTurno(Paciente paciente, ProfesionalSalud profesional, LocalDateTime fechaHora, String motivo) {
+        Turno turno = new Turno(/* ... */);
+        turnoRepository.guardarTurno(turno);
+    }
+}
+
+Descripción: El Principio de Inversión de Dependencias establece que los módulos de alto nivel no deben depender de los módulos de bajo nivel. Ambos deben depender de abstracciones. Aquí, AgendaTurnos (alto nivel) depende de la interfaz ITurnoRepository (abstracción), y los repositorios concretos (bajo nivel) también dependen de esta interfaz.
+
+
+

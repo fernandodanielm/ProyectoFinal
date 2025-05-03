@@ -138,4 +138,83 @@ Este principio es clave para construir sistemas escalables y eficientes. 🚀
 
 Al separar la responsabilidad de la persistencia en la clase `PacienteRepository`, la clase `Paciente` ahora tiene una única razón para cambiar: cuando la información o la lógica de negocio del paciente cambian. Los cambios en la tecnología de la base de datos o en la forma en que se almacenan los datos afectarán únicamente a la clase `PacienteRepository`. Esto hace que ambas clases sean más cohesivas, menos acopladas y más fáciles de mantener.
 
+# Estructura de clase
+[Enlace al diagrama UML Clas](https://1drv.ms/i/c/f2bf844ed8279638/EVZpKLHrUJtKtVFQPTpXhUkBOzl7YzhMQaMSNI5MiUklaw?e=mepCwR)
+
+¡Hola desde Haedo! ¡Excelente! Aquí tienes un archivo Markdown (.md) con una breve descripción de cada Diagrama UML que construimos para ilustrar los principios SOLID, junto con código Java interpolado para dar más fundamento a cada diagrama:
+
+Markdown
+
+# Principios SOLID y Diagramas UML con Código Java
+
+A continuación, se presenta una breve descripción de los Diagramas UML creados para ilustrar cada uno de los cinco principios SOLID en el contexto de nuestro sistema de gestión de turnos, junto con ejemplos de código Java interpolado.
+
+# Principios SOLID en el Sistema de Gestión de Turnos
+
+A continuación, se presenta la aplicación de los cinco principios SOLID en el diseño de clases de nuestro sistema de gestión de turnos, con diagramas UML y ejemplos de código Java interpolado.
+
+## 1. Principio de Responsabilidad Única (SRP)
+
+**Diagrama UML:**
+
+
+@startuml
+class Paciente {
+  - telefono: String
+  - correoElectronico: String
+  - historialTurnos: List<Turno>
+  --
+  + Paciente(String, String, LocalDate, String, String)
+  + getTelefono(): String
+  + setTelefono(telefono: String): void
+  + getCorreoElectronico(): String
+  + setCorreoElectronico(correoElectronico: String): void
+  + getHistorialTurnos(): List<Turno>
+  + setHistorialTurnos(Turnos: List<Turno>): void
+}
+
+class PacienteRepository {
+  + guardarPaciente(Paciente): void
+  + cargarPaciente(String): Paciente
+}
+
+class ServicioPaciente {
+  + registrarNuevoPaciente(String, String, LocalDate, String, String): Paciente
+  + obtenerPacientePorDocumento(String): Paciente
+}
+
+ServicioPaciente ..> PacienteRepository : utiliza
+
+note right of Paciente: Responsabilidad: Información del Paciente
+note right of PacienteRepository: Responsabilidad: Persistencia del Paciente
+@enduml
+
+¡Hola desde Haedo! ¡Entendido! Aquí tienes todo el contenido que generamos sobre los principios SOLID, sus diagramas UML y el código Java interpolado, todo junto en un único archivo Markdown (.md):
+
+Markdown
+
+# Principios SOLID en el Sistema de Gestión de Turnos
+
+A continuación, se presenta la aplicación de los cinco principios SOLID en el diseño de clases de nuestro sistema de gestión de turnos, con diagramas UML y ejemplos de código Java interpolado.
+
+## 1. Principio de Responsabilidad Única (SRP)
+
+**Diagrama UML:**
+
+```java
+class PacienteRepository {
+    public void guardarPaciente(Paciente paciente) {
+        // Lógica para guardar el paciente en la base de datos
+        System.out.println("Guardando paciente " + paciente.getNombreCompleto() + " en la base de datos.");
+    }
+
+    public Paciente cargarPaciente(String numeroDocumento) {
+        // Lógica para cargar el paciente desde la base de datos
+        System.out.println("Cargando paciente con documento " + numeroDocumento + " desde la base de datos.");
+        // ... código para crear y retornar una instancia de Paciente ...
+        return new Paciente("Nombre de Ejemplo", numeroDocumento, LocalDate.now().minusYears(30), "123456789", "ejemplo@email.com");
+    }
+}
+
+Descripción: El Principio de Responsabilidad Única establece que una clase debe tener una y solo una razón para cambiar. En este diagrama, la clase Paciente se encarga de la información del paciente, mientras que PacienteRepository se encarga de la persistencia. ServicioPaciente orquesta estas responsabilidades.
 

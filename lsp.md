@@ -161,3 +161,37 @@ De esta manera, todas las clases **pueden sustituir a su superclase sin romper e
 **Resultado:**
 
 Con este diseño, para agregar una nueva validación (por ejemplo, validar el formato del teléfono), simplemente creamos una nueva clase `ValidadorFormatoTelefono` que implementa `ValidadorPaciente`. No necesitamos modificar la interfaz `ValidadorPaciente` ni la clase `ServicioValidacionPaciente`. El sistema está abierto a la extensión (añadiendo nuevos validadores) pero cerrado a la modificación (el código existente de validación no se altera).
+
+# Estructura de clases
+
+[Enlace al diagrama](https://1drv.ms/i/c/f2bf844ed8279638/EXEWyxYQ8WFMk6L96LrVnHEBWdSbrLSywJGnKO4IS3zHFA?e=9OWqtb)
+
+```Java
+class ProfesionalSalud {
+    private String nombreCompleto;
+    private String numeroDocumento;
+    // ...
+
+    public Map<String, String> obtenerInformacionProfesional() {
+        return Map.of("nombre", nombreCompleto, "documento", numeroDocumento);
+    }
+}
+
+class Medico extends ProfesionalSalud {
+    private String especialidad;
+
+    @Override
+    public Map<String, String> obtenerInformacionProfesional() {
+        Map<String, String> info = super.obtenerInformacionProfesional();
+        info.put("especialidad", especialidad);
+        return info;
+    }
+}
+
+class AgendaTurnos {
+    public void asignarTurno(Paciente paciente, ProfesionalSalud profesional, LocalDateTime fechaHora, String motivo) {
+        System.out.println("Asignando turno a: " + profesional.obtenerInformacionProfesional().get("nombre"));
+    }
+}
+
+Descripción: El Principio de Sustitución de Liskov establece que los objetos de una superclase deben poder ser reemplazados por objetos de sus subclases sin alterar la correctitud del programa. Aquí, Medico y Enfermero son subtipos de ProfesionalSalud y pueden ser utilizados indistintamente por AgendaTurnos-
