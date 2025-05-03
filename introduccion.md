@@ -123,13 +123,259 @@ La POO es importante porque facilita:
     * Las **Clases Hijas (Perro, Gato, Pájaro)** implementan este método de forma distinta, devolviendo sonidos específicos según la clase.
     * El megáfono simboliza un intermediario que envía el mismo mensaje a distintos tipos de objetos, demostrando cómo cada uno responde de manera única.
 
-## Requisitos Iniciales del Sistema
+# Requisitos Iniciales del Sistema
 
-1.  **Registro de Pacientes:** El sistema debe permitir registrar la información básica de un nuevo paciente (nombre completo, número de documento, fecha de nacimiento, teléfono, correo electrónico).
-2.  **Registro de Médicos:** El sistema debe permitir registrar la información de un nuevo profesional de la salud (nombre, matrícula profesional, especialidad, horario de atención, teléfono, correo electrónico).
-3.  **Solicitud de Turno:** Un paciente debe poder solicitar un turno especificando la fecha, hora deseada y el motivo de la consulta.
-4.  **Asignación de Turnos:** El sistema debe permitir asignar un turno a un paciente con un médico específico, verificando la disponibilidad del médico en la fecha y hora solicitadas.
-5.  **Consulta de Turnos:** Tanto los pacientes como los médicos deben poder consultar sus turnos programados (fecha, hora, médico/paciente, estado).
+## Explicación de mi Diagrama UML del Sistema de Gestión de Turnos
+
+Mí diagrama UML representa la estructura de clases clave diseñadas para cumplir con los requisitos iniciales de nuestro sistema de gestión de turnos médicos. El diagrama se centra en las entidades principales, sus atributos y las relaciones entre ellas, facilitando el registro de pacientes y profesionales de la salud, la solicitud y asignación de turnos, y la consulta de la información programada.
+
+## Clases Principales y sus Responsabilidades:
+
+**Paciente:** Esta clase modela a los pacientes del sistema. Contiene atributos esenciales para el registro, como `nombreCompleto`, `numeroDocumento`, `fechaNacimiento`, `telefono`, y `correoElectronico`. Además, mantiene una lista de `historialTurnos`, lo que permite rastrear los turnos pasados y futuros del paciente.
+
+**ProfesionalSalud:** Esta clase representa a los médicos u otros profesionales de la salud que ofrecen consultas. Al igual que el paciente, almacena información de registro básica (`nombreCompleto`, `telefono`, `correoElectronico`). Adicionalmente, incluye detalles específicos de su rol, como `matriculaProfesional`, `especialidad`, y `horarioAtencion`, cruciales para la asignación de turnos.
+
+**Turno:** Esta clase representa un turno específico en el sistema. Contiene la información temporal del turno (`fechaHora`), el motivo de la consulta (`motivoConsulta`), y su estado actual (`estado`, por ejemplo, `SOLICITADO`, `ASIGNADO`, `CANCELADO`). Lo más importante es que establece relaciones (asociaciones) con las instancias de `Paciente` y `ProfesionalSalud`, indicando quién solicitó el turno y con quién está programado.
+
+**AgendaTurnos:** Esta clase actúa como el cerebro de la lógica de negocio relacionada con los turnos. Su responsabilidad principal es gestionar el ciclo de vida de los turnos. Para ello, depende de una interfaz llamada `ITurnoRepository` para la persistencia de los datos de los turnos. Los métodos clave de `AgendaTurnos` incluyen:
+
+* `solicitarTurno()`: Permite a un paciente iniciar una solicitud de turno.
+* `asignarTurno()`: Asigna un turno solicitado a un profesional de la salud, probablemente verificando su disponibilidad.
+* `consultarTurnosPaciente()`: Permite a un paciente ver sus turnos programados.
+* `consultarTurnosProfesional()`: Permite a un profesional de la salud ver su agenda de turnos.
+
+**ITurnoRepository (Interfaz):** Esta interfaz define un contrato para las operaciones de persistencia relacionadas con la clase `Turno`. Declara métodos como `guardarTurno()`, `cargarTurno()`, `obtenerTurnosPorPaciente()`, y `obtenerTurnosPorProfesional()`. Al ser una interfaz, no especifica cómo se implementan estas operaciones en una base de datos concreta.
+
+**MySQLTurnoRepository y PostgreSQLTurnoRepository (Clases):** Estas clases son implementaciones concretas de la interfaz `ITurnoRepository`. Cada una contiene la lógica específica para interactuar con una base de datos en particular (MySQL y PostgreSQL, respectivamente). Esto permite que el sistema sea flexible y pueda cambiar la base de datos subyacente con una mínima modificación en la lógica de negocio principal (`AgendaTurnos`), adhiriéndose al Principio de Inversión de Dependencias (DIP).
+
+## Flujo de Interacción Implícito:
+
+Cuando un paciente solicita un turno, la clase `AgendaTurnos` recibe la solicitud y, utilizando una instancia de un repositorio concreto (inyectada a través de la interfaz `ITurnoRepository`), guarda la información del nuevo turno. Al asignar un turno, `AgendaTurnos` actualiza el estado del turno y asocia el paciente y el profesional de la salud correspondientes, persistiendo estos cambios a través del repositorio. Tanto pacientes como profesionales pueden consultar sus turnos llamando a los métodos de `AgendaTurnos`, que a su vez utiliza el repositorio para obtener la información almacenada.
+
+## En Resumen:
+
+Mi diagrama UML modela un sistema robusto y flexible para la gestión de turnos, separando las responsabilidades de la lógica de negocio de la persistencia de datos a través del uso de interfaces y permitiendo la interacción entre pacientes, profesionales de la salud y los turnos programados. Cumple con los requisitos iniciales del sistema al proporcionar las estructuras necesarias para el registro, la solicitud, la asignación y la consulta de turnos.
+
+## Base para el diagrama UML Class
+
+```Java
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+class Paciente {
+    private String nombreCompleto;
+    private String numeroDocumento;
+    private LocalDate fechaNacimiento;
+    private String telefono;
+    private String correoElectronico;
+    private List<Turno> historialTurnos;
+
+    public Paciente(String nombreCompleto, String numeroDocumento, LocalDate fechaNacimiento, String telefono, String correoElectronico) {
+        this.nombreCompleto = nombreCompleto;
+        this.numeroDocumento = numeroDocumento;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.correoElectronico = correoElectronico;
+        this.historialTurnos = new ArrayList<>();
+    }
+
+    // Getters y setters (omitidos para brevedad)
+
+    public List<Turno> getHistorialTurnos() {
+        return historialTurnos;
+    }
+
+    public void agregarTurno(Turno turno) {
+        this.historialTurnos.add(turno);
+    }
+}
+
+class ProfesionalSalud {
+    private String nombreCompleto;
+    private String matriculaProfesional;
+    private String especialidad;
+    private String horarioAtencion;
+    private String telefono;
+    private String correoElectronico;
+
+    public ProfesionalSalud(String nombreCompleto, String matriculaProfesional, String especialidad, String horarioAtencion, String telefono, String correoElectronico) {
+        this.nombreCompleto = nombreCompleto;
+        this.matriculaProfesional = matriculaProfesional;
+        this.especialidad = especialidad;
+        this.horarioAtencion = horarioAtencion;
+        this.telefono = telefono;
+        this.correoElectronico = correoElectronico;
+    }
+
+    // Getters y setters (omitidos para brevedad)
+}
+
+class Turno {
+    private LocalDateTime fechaHora;
+    private String motivoConsulta;
+    private String estado;
+    private Paciente paciente;
+    private ProfesionalSalud profesional;
+
+    public Turno(LocalDateTime fechaHora, String motivoConsulta, Paciente paciente) {
+        this.fechaHora = fechaHora;
+        this.motivoConsulta = motivoConsulta;
+        this.paciente = paciente;
+        this.estado = "SOLICITADO";
+    }
+
+    // Getters y setters (omitidos para brevedad)
+
+    public void asignarProfesional(ProfesionalSalud profesional) {
+        this.profesional = profesional;
+        this.estado = "ASIGNADO";
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public ProfesionalSalud getProfesional() {
+        return profesional;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+}
+
+interface ITurnoRepository {
+    void guardarTurno(Turno turno);
+    Turno cargarTurno(int idTurno);
+    List<Turno> obtenerTurnosPorPaciente(Paciente paciente);
+    List<Turno> obtenerTurnosPorProfesional(ProfesionalSalud profesional);
+}
+
+class MySQLTurnoRepository implements ITurnoRepository {
+    // Simulación de la lógica de la base de datos MySQL
+    @Override
+    public void guardarTurno(Turno turno) {
+        System.out.println("Guardando turno para paciente " + turno.getPaciente().getNombreCompleto() + " en MySQL.");
+    }
+
+    @Override
+    public Turno cargarTurno(int idTurno) {
+        System.out.println("Cargando turno con ID " + idTurno + " desde MySQL.");
+        return null; // Simulación
+    }
+
+    @Override
+    public List<Turno> obtenerTurnosPorPaciente(Paciente paciente) {
+        System.out.println("Obteniendo turnos para paciente " + paciente.getNombreCompleto() + " desde MySQL.");
+        return new ArrayList<>(); // Simulación
+    }
+
+    @Override
+    public List<Turno> obtenerTurnosPorProfesional(ProfesionalSalud profesional) {
+        System.out.println("Obteniendo turnos para profesional " + profesional.getNombreCompleto() + " desde MySQL.");
+        return new ArrayList<>(); // Simulación
+    }
+}
+
+class PostgreSQLTurnoRepository implements ITurnoRepository {
+    // Simulación de la lógica de la base de datos PostgreSQL
+    @Override
+    public void guardarTurno(Turno turno) {
+        System.out.println("Guardando turno para paciente " + turno.getPaciente().getNombreCompleto() + " en PostgreSQL.");
+    }
+
+    @Override
+    public Turno cargarTurno(int idTurno) {
+        System.out.println("Cargando turno con ID " + idTurno + " desde PostgreSQL.");
+        return null; // Simulación
+    }
+
+    @Override
+    public List<Turno> obtenerTurnosPorPaciente(Paciente paciente) {
+        System.out.println("Obteniendo turnos para paciente " + paciente.getNombreCompleto() + " desde PostgreSQL.");
+        return new ArrayList<>(); // Simulación
+    }
+
+    @Override
+    public List<Turno> obtenerTurnosPorProfesional(ProfesionalSalud profesional) {
+        System.out.println("Obteniendo turnos para profesional " + profesional.getNombreCompleto() + " desde PostgreSQL.");
+        return new ArrayList<>(); // Simulación
+    }
+}
+
+class AgendaTurnos {
+    private final ITurnoRepository turnoRepository;
+
+    public AgendaTurnos(ITurnoRepository turnoRepository) {
+        this.turnoRepository = turnoRepository;
+    }
+
+    public Turno solicitarTurno(Paciente paciente, LocalDateTime fechaHora, String motivoConsulta) {
+        Turno nuevoTurno = new Turno(fechaHora, motivoConsulta, paciente);
+        turnoRepository.guardarTurno(nuevoTurno);
+        paciente.agregarTurno(nuevoTurno);
+        System.out.println("Turno solicitado para " + paciente.getNombreCompleto() + " el " + fechaHora);
+        return nuevoTurno;
+    }
+
+    public boolean asignarTurno(Turno turno, ProfesionalSalud profesional) {
+        // Aquí iría la lógica para verificar la disponibilidad del profesional
+        turno.asignarProfesional(profesional);
+        turnoRepository.guardarTurno(turno);
+        System.out.println("Turno asignado a " + profesional.getNombreCompleto() + " el " + turno.getFechaHora());
+        return true;
+    }
+
+    public List<Turno> consultarTurnosPaciente(Paciente paciente) {
+        System.out.println("Consultando turnos para el paciente " + paciente.getNombreCompleto());
+        return turnoRepository.obtenerTurnosPorPaciente(paciente);
+    }
+
+    public List<Turno> consultarTurnosProfesional(ProfesionalSalud profesional) {
+        System.out.println("Consultando turnos para el profesional " + profesional.getNombreCompleto());
+        return turnoRepository.obtenerTurnosPorProfesional(profesional);
+    }
+}
+
+public class SistemaGestionTurnos {
+    public static void main(String[] args) {
+        // Ejemplo de uso
+        Paciente paciente1 = new Paciente("Juan Pérez", "12345678", LocalDate.of(1990, 5, 15), "123-456-7890", "juan.perez@email.com");
+        ProfesionalSalud medico1 = new ProfesionalSalud("Dra. Ana López", "MP12345", "Cardiología", "Lunes a Viernes 9-17", "987-654-3210", "ana.lopez@hospital.com");
+
+        ITurnoRepository turnoRepository = new MySQLTurnoRepository(); // Podríamos cambiar a PostgreSQL sin modificar AgendaTurnos
+        AgendaTurnos agenda = new AgendaTurnos(turnoRepository);
+
+        LocalDateTime fechaHoraSolicitud = LocalDateTime.of(2025, 5, 10, 10, 0);
+        Turno turnoSolicitado = agenda.solicitarTurno(paciente1, fechaHoraSolicitud, "Control de rutina");
+
+        if (turnoSolicitado != null) {
+            agenda.asignarTurno(turnoSolicitado, medico1);
+        }
+
+        agenda.consultarTurnosPaciente(paciente1);
+        agenda.consultarTurnosProfesional(medico1);
+    }
+}
+
+/*
+Me basé en este programa Java para poder realizar el diagrama UML Class.
+Este código Java ilustra la implementación de las clases y la interfaz que se describieron en la explicación del diagrama UML.
+Se pueden observar las entidades Paciente, ProfesionalSalud, Turno, la interfaz ITurnoRepository y una implementación concreta (MySQLTurnoRepository).
+La clase AgendaTurnos orquesta la lógica de negocio, utilizando la interfaz para interactuar con la capa de persistencia.
+Este código refleja la estructura y las responsabilidades definidas en el diagrama UML Class del sistema de gestión de turnos.
+*/
+```
 
 ## Casos de Uso
 
@@ -214,9 +460,9 @@ La POO es importante porque facilita:
 
 Este es el boceto inicial del diseño de clases, incrustado como una imagen y con un enlace para su visualización.
 
-![Boceto de Diagrama UML del sistema](/imagendebocetoUMLdelsistema/Diagram%202025-05-02%2010-33-22.png)
+![Boceto de Diagrama UML del sistema](/imagendebocetoUMLdelsistema/Diagram%202025-05-03%2016-03-28.png)
 
-[Enlace para visualizar el boceto en línea](https://1drv.ms/i/c/f2bf844ed8279638/EYWt67Y45_hOi_NOFG8invUBEwNZQJin11c6xzvQbu9xDw?e=DtGMKS)
+[Enlace para visualizar el boceto en línea](https://1drv.ms/i/c/f2bf844ed8279638/EXJ8u0SUJxtAhqW12xZfhBEBFSX3FENsatti8k6ySnlCdg?e=R8YbMy)
 
 **Descripción del Boceto Inicial de Clases:**
 
