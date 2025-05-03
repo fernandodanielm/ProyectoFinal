@@ -26,8 +26,8 @@ Las clases deben **depender de abstracciones, no de implementaciones concretas**
 
 Estos principios forman la base del diseño orientado a objetos y ayudan a desarrollar software escalable y sostenible. 🚀
 
-* [Responsabilidad Única (SRP)]()
-* [Abierto/Cerrado (OCP)]()
-* [Sustitución de Liskov (LSP)]()
-* [Segregación de Interfaces (ISP)]()
-* [Inversión de Dependencias (DIP)]()
+* [Responsabilidad Única (SRP)](/srp.md)
+* [Abierto/Cerrado (OCP)](/ocp.md)
+* [Sustitución de Liskov (LSP)](/lsp.md)
+* [Segregación de Interfaces (ISP)](/isp.md)
+* [Inversión de Dependencias (DIP)](/dip.md)
