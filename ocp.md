@@ -1,7 +1,5 @@
 # Principio de Abierto/Cerrado (OCP)
 
-# Principio de Abierto/Cerrado (OCP)
-
 El **Principio de Abierto/Cerrado (OCP)** es uno de los pilares fundamentales de los principios **SOLID** en programación orientada a objetos. Permite que un sistema pueda evolucionar sin necesidad de modificar el código existente.
 
 ## 🔹 Propósito del OCP
