@@ -52,7 +52,7 @@ Luego, cada método de pago se implementa en una clase separada:
 - `PagoTransferenciaBancaria`  
 - `PagoCriptomonedas`  
 
-Ahora, si más adelante se necesita agregar **Apple Pay**, simplemente se crea `PagoApplePay`, sin afectar el código principal del procesador de pagos.  
+  
 
 ## ✨ Beneficios de aplicar DIP  
 ✔ **Reduce el acoplamiento entre clases y módulos**.  
@@ -70,7 +70,7 @@ Ahora, si más adelante se necesita agregar **Apple Pay**, simplemente se crea `
     2.  Las abstracciones no deben depender de los detalles. Los detalles (las implementaciones concretas) deben depender de las abstracciones.
     El DIP es un principio de diseño de dependencias entre módulos y clases.
 
-* **Motivación:** En nuestro sistema, la clase `AgendaTurnos` (un módulo de alto nivel que contiene la lógica de negocio para la gestión de turnos) necesita persistir la información de los turnos (un módulo de bajo nivel que se encarga de la interacción con la base de datos). Si `AgendaTurnos` dependiera directamente de una implementación concreta de la persistencia, cualquier cambio en esa implementación (por ejemplo, cambiar la base de datos) afectaría directamente a `AgendaTurnos`. El DIP busca desacoplar estos módulos haciendo que ambos dependan de abstracciones (interfaces).
+* **Motivación:** En el sistema, la clase `AgendaTurnos` (un módulo de alto nivel que contiene la lógica de negocio para la gestión de turnos) necesita persistir la información de los turnos (un módulo de bajo nivel que se encarga de la interacción con la base de datos). Si `AgendaTurnos` dependiera directamente de una implementación concreta de la persistencia, cualquier cambio en esa implementación (por ejemplo, cambiar la base de datos) afectaría directamente a `AgendaTurnos`. El DIP busca desacoplar estos módulos haciendo que ambos dependan de abstracciones (interfaces).
 
 * **Caso Real (Descripción Textual): Desacoplando la Lógica de Negocio de Turnos de la Implementación de Persistencia**
 
@@ -188,9 +188,7 @@ Ahora, si más adelante se necesita agregar **Apple Pay**, simplemente se crea `
         }
         ```
 
-**Resultado:**
 
-Con este diseño, `AgendaTurnos` (el módulo de alto nivel) depende de la abstracción `ITurnoRepository`, y las implementaciones concretas (`MySQLTurnoRepository`, `PostgreSQLTurnoRepository` - módulos de bajo nivel) también dependen de la misma abstracción. Esto desacopla la lógica de negocio de la gestión de turnos de la implementación específica de la persistencia. Ahora podemos cambiar la base de datos simplemente proporcionando una nueva implementación de `ITurnoRepository` a la clase `AgendaTurnos` sin necesidad de modificar su código fuente. Esto hace que el sistema sea más flexible, robusto y fácil de adaptar a futuros cambios en la infraestructura de persistencia.
 
 # Estructura de clase
 ![Imagen del Diagrama](/imagenesPricipioSolid/DiagramaUMLDIP.png)

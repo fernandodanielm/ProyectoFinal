@@ -143,7 +143,7 @@ Al separar la responsabilidad de la persistencia en la clase `PacienteRepository
 
 [Enlace al diagrama UML Clas](https://1drv.ms/i/c/f2bf844ed8279638/EVZpKLHrUJtKtVFQPTpXhUkBOzl7YzhMQaMSNI5MiUklaw?e=mepCwR)
 
-¡Hola desde Haedo! ¡Excelente! Aquí tienes un archivo Markdown (.md) con una breve descripción de cada Diagrama UML que construimos para ilustrar los principios SOLID, junto con código Java interpolado para dar más fundamento a cada diagrama:
+
 
 Markdown
 
