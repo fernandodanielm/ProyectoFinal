@@ -144,7 +144,6 @@ Al separar la responsabilidad de la persistencia en la clase `PacienteRepository
 [Enlace al diagrama UML Clas](https://1drv.ms/i/c/f2bf844ed8279638/EVZpKLHrUJtKtVFQPTpXhUkBOzl7YzhMQaMSNI5MiUklaw?e=mepCwR)
 
 
-
 Markdown
 
 # Principios SOLID y Diagramas UML con Código Java

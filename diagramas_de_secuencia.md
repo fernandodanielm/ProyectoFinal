@@ -1,131 +1,172 @@
 # Diagrama de Secuencias
 
-* Diagrama de Secuencia - ConsultarAgendaProfesional 
+* Diagrama de Secuencia - Asignar Turno 
 
-![Diagrama de Secuencia - ConsultarAgendaProfesional](/imagenesDiagramasDeSecuencia/diagramadesecuencias1ConsultarAgendaProfesional.png)
+![Diagrama de Secuencia - ConsultarAgendaProfesional](/imagenesDiagramasDeSecuencia/1.AsignarTurno.png)
 
-[Enlace a la imagen de Diagrama de Secuencia - ConsultarAgendaProfesional ](https://1drv.ms/i/c/f2bf844ed8279638/EaruUIblhvJElRuRCFUjx1UBaracQXtmgwmm70QJOJGOhw?e=35GdWU)
+[Enlace a la imagen de Diagrama de Secuencia - ConsultarAgendaProfesional ](https://1drv.ms/i/c/f2bf844ed8279638/EeUcEgioszZIp858UsEsuGwBtUhDBTmDgRHLfKFdWaOdTw?e=wUjlPe)
 
 # Descripción del Diagrama de Secuencia: Consulta Turnos Paciente
+Este diagrama de secuencia describe el proceso de consulta de un turno existente. A continuación, se detalla paso a paso lo que ocurre:
 
-Este diagrama de secuencia ilustra la interacción entre diferentes participantes del sistema para el caso de uso "Consulta Turnos Paciente".
+:Paciente solicita una consulta de turno: El proceso inicia cuando un actor o sistema representado como :Paciente envía un mensaje solicitarConsultaTurno(idTurno: String) a la :InterfazUsuario. Este mensaje lleva como parámetro el ID del turno que se desea consultar.
 
-El proceso comienza cuando el **\_01\_Paciente** envía un mensaje "Selecciona 'Mis Turnos'" a la **\_02\_Interfaz del Sistema**.
+:InterfazUsuario consulta el turno: La :InterfazUsuario recibe la solicitud y, a su vez, envía un mensaje ConsultarTurno(idTurno: String) al objeto :AgendarTurnos. Esto indica que la interfaz de usuario delega la lógica de negocio para consultar el turno a la clase o módulo AgendarTurnos.
 
-Al recibir este mensaje, la **\_02\_Interfaz del Sistema** se activa y, posteriormente, el **\_01\_Paciente** envía otro mensaje "Solicitar Mis Turnos" a la misma interfaz.
+:AgendarTurnos obtiene el turno del repositorio: El objeto :AgendarTurnos necesita recuperar la información del turno. Para ello, envía un mensaje obtenerTurnoPorId(idTurno: String) al :ITurnoRepository. Este último representa una interfaz o abstracción para acceder a los datos de los turnos (probablemente una base de datos o un servicio de almacenamiento).
 
-La **\_02\_Interfaz del Sistema** recibe esta solicitud y envía un mensaje "consultarTurnosPaciente(PAC-123)" al **\_03\_Sistema**.
+:ITurnoRepository retorna el turno: El :ITurnoRepository procesa la solicitud y, una vez que encuentra el turno correspondiente al idTurno proporcionado, envía un mensaje de retorno return turno: Turno de vuelta a :AgendarTurnos. Este mensaje contiene el objeto Turno con todos sus detalles.
 
-El **\_03\_Sistema** se activa y, a su vez, envía un mensaje "Consultar Turnos (PAC-123)" a la **\_06\_Base de Datos (de Turnos Asignados)**.
+:AgendarTurnos muestra el detalle del turno: Una vez que :AgendarTurnos ha recibido el objeto Turno del repositorio, envía un mensaje mostrarDetalleTurno(turno: Turno) a la :InterfazUsuario. Esto indica que AgendarTurnos le pasa la información del turno a la interfaz para que esta lo presente al usuario.
 
-La **\_06\_Base de Datos (de Turnos Asignados)** responde al **\_03\_Sistema** con un mensaje punteado "Lista de Turnos del Paciente", indicando la devolución de la información solicitada.
+Fin de la interacción:
 
-Finalmente, el **\_03\_Sistema** envía un mensaje "mostrarTurnosPaciente(listaDeTurnos)" a la **\_02\_Interfaz del Sistema**, que se activa para mostrar la información de los turnos al paciente (esta última interacción visual con el paciente no se muestra explícitamente con una flecha saliente).
+La :InterfazUsuario muestra los detalles del turno al :Paciente.
+La línea de vida de :Paciente termina, indicando que su interacción directa con el sistema ha concluido para esta operación.
+La línea de vida de :AgendarTurnos y :ITurnoRepository también terminan, indicando que sus responsabilidades en esta secuencia han finalizado.
+Finalmente, la línea de vida de :InterfazUsuario también termina, lo que sugiere que la consulta del turno ha sido completada y presentada al usuario.
 
-El diagrama muestra la secuencia de mensajes y las activaciones de los diferentes componentes del sistema involucrados en la consulta de los turnos de un paciente.
 
 * Diagrama de Secuencia - Solicitar Turno 
 
-![DDS-ST](/imagenesDiagramasDeSecuencia/diagramadesecuencias2SolicitarTurno.png)
+![DDS-ST](/imagenesDiagramasDeSecuencia/3.SolicitarTurno.png)
 
-[Enlace a la imagen de Diagrama de Secuencia - Solicitar Turno](https://1drv.ms/i/c/f2bf844ed8279638/EfdDOgWoQ8xFmf7OJECKWTUBYhLwI_801PLG_Ptcwa14ag?e=BEUle8)
+[Enlace a la imagen de Diagrama de Secuencia - Solicitar Turno](https://1drv.ms/i/c/f2bf844ed8279638/EVXaCNQ3yXJNvkoPY2t_E3IBVXk28l0qzU75VnFaOdq7qA?e=IUXRo8)
 
 # Descripción del Diagrama de Secuencia: Solicitar Turno
 
-Este diagrama de secuencia ilustra el flujo de interacciones entre diferentes participantes del sistema para el caso de uso "Solicitar Turno".
+Este diagrama de secuencia ilustra el proceso de "Solicitar Turno" en un sistema. A continuación, se describe paso a paso lo que sucede:
 
-El proceso comienza cuando el **\_01\_Paciente** interactúa con la **\_02\_Interfaz del Sistema** para seleccionar la opción de "Solicitar Turno". Esto se representa con un mensaje "Selecciona 'Solicitar Turno'".
+:Paciente inicia la solicitud de turno: El proceso comienza cuando el actor o sistema :Paciente envía el mensaje iniciarSolicitudTurno() a la :InterfazUsuario. Esto indica que el paciente desea comenzar el proceso para pedir un turno.
 
-A continuación, el **\_01\_Paciente** proporciona detalles sobre el turno deseado, incluyendo la fecha, hora y motivo. Estos se capturan en mensajes separados: "Selecciona Fecha: 2025-05-08", "Selecciona Hora: 14:30" y "Selecciona Motivo: Control de rutina".
+:InterfazUsuario solicita criterios de turno: La :InterfazUsuario responde al paciente enviándole el mensaje solicitarCriteriosTurno(profesional: String, fecha: Date, hora: Time). Esto le pide al paciente que ingrese la información necesaria para el turno, como el profesional deseado, la fecha y la hora.
 
-Una vez que el **\_01\_Paciente** ha proporcionado todos los detalles, confirma la solicitud enviando un mensaje "Click en 'Confirmar Turno'" a la **\_02\_Interfaz del Sistema**.
+:Paciente ingresa datos del turno: El :Paciente proporciona la información solicitada a través del mensaje ingresarDatosTurno(idProfesional: String, fecha: Date, hora: Time) a la :InterfazUsuario.
 
-La **\_02\_Interfaz del Sistema** recibe esta confirmación y envía un mensaje "solicitarTurno(pacienteId, 2025-05-08, 14:30, Control de rutina)" al **\_03\_Sistema**, que contiene la información del paciente y los detalles del turno solicitado.
+:InterfazUsuario solicita registrar el turno: Con los datos proporcionados por el paciente, la :InterfazUsuario envía el mensaje registrarTurno(idPaciente: String, idProfesional: String, fecha: Date, hora: Time) al objeto :AgendarTurnos. Esto delega la responsabilidad de registrar el turno a la clase o módulo AgendarTurnos.
 
-El **\_03\_Sistema** se activa y a su vez, envía un mensaje "Guardar Solicitud de Turno" a la **\_04\_Base de Datos**, donde se persiste la solicitud.
+:AgendarTurnos verifica la disponibilidad del profesional: Antes de crear el turno, :AgendarTurnos necesita saber si el profesional está disponible. Para ello, envía el mensaje consultarDisponibilidad(idProfesional: String, fecha: Date, hora: Time) al objeto :ProfesionalDeSalud. Este último es responsable de gestionar la disponibilidad de los profesionales.
 
-Finalmente, la **\_04\_Base de Datos** responde al **\_03\_Sistema** (esta respuesta no se muestra explícitamente en el diagrama), y el **\_03\_Sistema** envía un mensaje "confirmacionSolicitud(CU-001-20250508-1430)" a la **\_02\_Interfaz del Sistema**, que contiene un identificador único de la solicitud.  La **\_02\_Interfaz del Sistema** recibe esta confirmación y la muestra al paciente (esta última interacción visual con el paciente no se muestra explícitamente con una flecha saliente).
+:ProfesionalDeSalud retorna la disponibilidad: El objeto :ProfesionalDeSalud verifica su disponibilidad y retorna el resultado a :AgendarTurnos a través del mensaje return estaDisponible: Boolean.
 
-El diagrama muestra la secuencia de pasos desde que el paciente inicia la solicitud hasta que se guarda en la base de datos y se genera una confirmación.
+:AgendarTurnos crea el turno (si está disponible):
+
+Si estaDisponible es verdadero: :AgendarTurnos procede a crear una nueva instancia del objeto Turno. Esto se representa con el mensaje crear(idPaciente: String, idProfesional: String, fecha: Date, hora: Time) enviado al objeto :Turno.
+El objeto :Turno recién creado retorna una instancia de sí mismo (return nuevoTurno: Turno) a :AgendarTurnos.
+:AgendarTurnos guarda el turno: Una vez que el nuevoTurno ha sido creado, :AgendarTurnos envía el mensaje guardar(nuevoTurno: Turno) al :ITurnoRepository. Este repositorio es la interfaz para persistir los datos del turno (por ejemplo, en una base de datos).
+
+:ITurnoRepository retorna la confirmación de guardado: El :ITurnoRepository guarda el turno y retorna un booleano (return turnoGuardado: Boolean) a :AgendarTurnos indicando si la operación fue exitosa.
+
+:AgendarTurnos notifica el turno reservado: Asumiendo que el turno fue guardado exitosamente, :AgendarTurnos envía el mensaje notificarTurnoReservado(idTurno: String) a la :InterfazUsuario. Esto informa a la interfaz que el turno ha sido confirmado.
+
+:InterfazUsuario muestra la confirmación al paciente: Finalmente, la :InterfazUsuario muestra la confirmación al :Paciente a través del mensaje mostrarConfirmacionTurno(idTurno: String).
+
+Fin de la interacción: Las líneas de vida de todos los objetos (Paciente, InterfazUsuario, AgendarTurnos, Turno, ProfesionalDeSalud, ITurnoRepository) terminan, indicando que la secuencia ha finalizado.
 
 
-* Diagrama de Secuencia - Asignar Turno 
+* Diagrama de Secuencia - Cancelar Turno 
 
-![DDS-AT](/imagenesDiagramasDeSecuencia/diagramadesecuencia3AsignarTurno.png)
+![DDS-AT](/imagenesDiagramasDeSecuencia/4.CancelarTurno.png)
 
-[Enlace a la imagen de Diagrama de Secuencia - Solicitar Turno](https://1drv.ms/i/c/f2bf844ed8279638/EZmhJKbI7VFDswpEBVFW_wABj4kbhwwzPqduNIkiRQD6Dw?e=zUqfqS)
+[Enlace a la imagen de Diagrama de Secuencia - Solicitar Turno](https://1drv.ms/i/c/f2bf844ed8279638/EVXaCNQ3yXJNvkoPY2t_E3IBVXk28l0qzU75VnFaOdq7qA?e=KCWIiu)
 
 # Descripción del Diagrama de Secuencia: Asignar Turno
 
-Este diagrama de secuencia ilustra el flujo de interacciones entre varios participantes del sistema para el caso de uso "Asignar Turno".
+Este diagrama de secuencia describe el proceso de "Cancelar Turno" en un sistema. A continuación, se detalla paso a paso lo que ocurre:
 
-El proceso comienza cuando el **\_01\_Administrador/Recepcionista** interactúa con la **\_02\_Interfaz del Sistema** para iniciar la asignación de un turno. Esto se representa con los siguientes mensajes secuenciales: "Selecciona 'Asignar Turno'", "Selecciona Solicitud: SOL-005" y "Selecciona Profesional: PROF-123", seguido de la confirmación con "Click en 'Asignar Turno'".
+:Paciente inicia la cancelación del turno: El proceso comienza cuando el actor o sistema :Paciente envía el mensaje iniciarCancelacionTurno() a la :InterfazUsuario. Esto indica que el paciente desea comenzar el proceso para cancelar un turno.
 
-La **\_02\_Interfaz del Sistema** recibe estas interacciones y envía un mensaje "mostrarDisponibilidad(2025-05-08, 14:30)" al **\_03\_Sistema** para obtener la lista de profesionales disponibles.
+:InterfazUsuario solicita el ID del turno: La :InterfazUsuario responde al paciente pidiéndole que proporcione el ID del turno a cancelar a través del mensaje solicitarIdTurno().
 
-El **\_03\_Sistema** se activa y consulta la disponibilidad de profesionales enviando un mensaje "Consultar Disponibilidad (2025-05-08, 14:30)" a la **\_05\_Base de datos (de Profesionales)**.
+:Paciente ingresa el ID del turno: El :Paciente proporciona el ID del turno que desea cancelar enviando el mensaje ingresarIdTurno(idTurno: String) a la :InterfazUsuario.
 
-La **\_05\_Base de datos (de Profesionales)** responde al **\_03\_Sistema** con un mensaje punteado "Lista de Profesionales Disponibles".
+:InterfazUsuario solicita cancelar el turno: Con el ID del turno proporcionado, la :InterfazUsuario envía el mensaje cancelarTurno(idTurno: String) al objeto :AgendarTurnos. Esto delega la responsabilidad de la cancelación del turno a la clase o módulo AgendarTurnos.
 
-El **\_03\_Sistema** luego envía esta lista de vuelta a la **\_02\_Interfaz del Sistema** con el mensaje "Mostrar Profesionales Disponibles".
+:AgendarTurnos obtiene el turno del repositorio: Para poder actualizar el estado del turno, :AgendarTurnos primero necesita obtener la información actual del turno. Para ello, envía el mensaje obtenerTurno(idTurno: String) al :ITurnoRepository.
 
-Tras la selección del profesional y la confirmación, la **\_02\_Interfaz del Sistema** envía un mensaje "asignarTurno(SOL-005, PROF-123)" al **\_03\_Sistema**.
+:ITurnoRepository retorna el turno: El :ITurnoRepository busca el turno con el idTurno proporcionado y retorna el objeto Turno completo a :AgendarTurnos a través del mensaje return turno: Turno.
 
-El **\_03\_Sistema** se encarga de actualizar la información del turno. Envía un mensaje "UPDATE Solicitudes SET estado = 'Asignado', profesionalAsignado = 'PROF-123' WHERE solicitudId = 'SOL-005'" a la **\_04\_Base de Datos (de Solicitudes de Turno)** para actualizar el estado de la solicitud.
+:AgendarTurnos actualiza el estado del turno: Una vez que :AgendarTurnos tiene el objeto Turno, envía un mensaje actualizarEstadoTurno(turno: Turno, estado: String = "cancelado") al propio objeto :Turno. Esto indica que el objeto Turno es responsable de cambiar su propio estado a "cancelado".
 
-Además, el **\_03\_Sistema** inserta la información del turno asignado en la **\_06\_Base de Datos (de Turnos Asignados)** con el mensaje "INSERT INTO TurnosAsignados (solicitudId, profesionalId, fecha, hora) VALUES ('SOL-005', 'PROF-123', '2025-05-08', '14:30')".
+:Turno retorna el turno actualizado: El objeto :Turno actualiza su estado interno y retorna la instancia del turno con el estado modificado (return turnoActualizado: Turno) de vuelta a :AgendarTurnos.
 
-Finalmente, el **\_03\_Sistema** notifica la asignación enviando un mensaje "enviarNotificacion(PAC-456, PROF-123, 2025-05-08, 14:30)" al **\_07\_Sistema de Notificaciones**, y envía una "Confirmación de Asignación" a la **\_02\_Interfaz del Sistema** para informar al administrador/recepcionista.
+:AgendarTurnos guarda el turno actualizado: Para persistir el cambio de estado, :AgendarTurnos envía el mensaje guardarTurno(turno: Turno) al :ITurnoRepository. Esto le indica al repositorio que actualice la información del turno en el almacenamiento.
 
-El diagrama ilustra la secuencia completa de pasos involucrados en la asignación de un turno, incluyendo la interacción con múltiples bases de datos y el sistema de notificaciones.
+:ITurnoRepository retorna la confirmación de guardado: El :ITurnoRepository guarda el turno actualizado y retorna un booleano (return turnoGuardado: Boolean) a :AgendarTurnos indicando si la operación de guardado fue exitosa.
 
-* Diagrama de Secuencia - Consultar Turno Paciente 
+:AgendarTurnos notifica la cancelación exitosa: Asumiendo que el turno fue guardado con el estado "cancelado", :AgendarTurnos envía el mensaje notificarCancelacionExitosa(idTurno: String) a la :InterfazUsuario. Esto informa a la interfaz que la cancelación ha sido confirmada.
 
-![DDS-CTP](/imagenesDiagramasDeSecuencia/diagramadecasodesecuencia4ConsultarTurnoPaciente.png)
+:InterfazUsuario muestra la confirmación al paciente: Finalmente, la :InterfazUsuario muestra la confirmación de la cancelación al :Paciente a través del mensaje mostrarConfirmacionCancelacion(idTurno: String).
 
-[Enlace a la imagen de Diagrama de Secuencia - Consultar Turno Paciente](https://1drv.ms/i/c/f2bf844ed8279638/EbH6rhsPVvlIrpJ-PeZ9slABoCnnToivxH0HIvjM8CioDw?e=GJpc2h)
+Fin de la interacción: Las líneas de vida de todos los objetos involucrados en la secuencia terminan, indicando que el proceso de cancelación del turno ha finalizado.
+
+* Diagrama de Secuencia - Consultar disponibilidad profesional
+
+![DDS-CTP](/imagenesDiagramasDeSecuencia/2.ConsultarDisponibilidadProfesional.png)
+
+[Enlace a la imagen de Diagrama de Secuencia - Consultar Turno Paciente](https://1drv.ms/i/c/f2bf844ed8279638/Ec5weXQjHuFNj7IeL0FqHtEBEXPe2qd4mLWGxB71gQi9MQ?e=vb9Fy8)
 
 # Descripción del Diagrama de Secuencia: Consultar Turno Paciente
 
-Este diagrama de secuencia ilustra el flujo de interacciones entre diferentes participantes del sistema para el caso de uso "Consultar Turno Paciente".
+Este diagrama de secuencia describe el proceso de "Consultar Disponibilidad Profesional". A continuación, se detalla paso a paso lo que ocurre:
 
-El proceso comienza cuando el **\_01\_Paciente** envía un mensaje "Selecciona 'Mis Turnos'" a la **\_02\_Interfaz del Sistema**.
+:Administrativo inicia la consulta de disponibilidad: El proceso comienza cuando el actor o sistema :Administrativo envía el mensaje iniciarConsultaDisponibilidad() a la :InterfazUsuario. Esto indica que un administrativo desea consultar la disponibilidad de un profesional.
 
-A continuación, el **\_01\_Paciente** envía el mensaje "Solicitar Mis Turnos" a la **\_02\_Interfaz del Sistema**.
+:InterfazUsuario solicita criterios de disponibilidad: La :InterfazUsuario responde al administrativo enviándole el mensaje solicitarCriteriosDisponibilidad(idProfesional: String, fecha: Date). Esto le pide al administrativo que ingrese el ID del profesional y la fecha para la cual desea consultar la disponibilidad.
 
-La **\_02\_Interfaz del Sistema** recibe esta solicitud y envía un mensaje "consultarTurnosPaciente(PAC-123)" al **\_03\_Sistema**.
+:Administrativo ingresa criterios de disponibilidad: El :Administrativo proporciona la información solicitada a través del mensaje ingresarCriteriosDisponibilidad(idProfesional: String, fecha: Date) a la :InterfazUsuario.
 
-El **\_03\_Sistema** se activa y, a su vez, envía un mensaje "Consultar Turnos (PAC-123)" a la **\_06\_Base de Datos (de Turnos Asignados)**.
+:InterfazUsuario consulta la disponibilidad del profesional: Con los datos proporcionados por el administrativo, la :InterfazUsuario envía el mensaje consultarDisponibilidadProfesional(idProfesional: String, fecha: Date) al objeto :AgendarTurnos. Esto delega la responsabilidad de consultar la disponibilidad al módulo AgendarTurnos.
 
-La **\_06\_Base de Datos (de Turnos Asignados)** responde al **\_03\_Sistema** con un mensaje "Lista de Turnos del Paciente", indicando la devolución de la información solicitada.
+:AgendarTurnos obtiene los turnos ocupados: Para determinar la disponibilidad, :AgendarTurnos primero necesita saber qué turnos ya están ocupados para el profesional y la fecha dados. Para ello, envía el mensaje obtenerTurnosOcupados(idProfesional: String, fecha: Date) al :ITurnoRepository. Este repositorio es la fuente de información sobre los turnos existentes.
 
-Finalmente, el **\_03\_Sistema** envía un mensaje "mostrarTurnosPaciente(listaDeTurnos)" a la **\_02\_Interfaz del Sistema**, que recibe los datos y los muestra al paciente (esta última interacción no se representa con una flecha saliente).
+:ITurnoRepository retorna la lista de turnos ocupados: El :ITurnoRepository consulta sus datos y retorna una lista de los turnos ya ocupados para el profesional y la fecha especificados (return listaTurnosOcupados: List<Turno>) a :AgendarTurnos.
 
-El diagrama muestra la secuencia de pasos necesarios para que un paciente consulte sus turnos, desde la selección de la opción en la interfaz hasta la recuperación y presentación de la información.
+:AgendarTurnos obtiene los horarios laborales del profesional: Además de los turnos ocupados, :AgendarTurnos necesita conocer el horario laboral general del profesional para esa fecha. Para ello, envía el mensaje obtenerHorariosLaborales(idProfesional: String, fecha: Date) al objeto :ProfesionalDeSalud.
+
+:ProfesionalDeSalud retorna los horarios laborales: El objeto :ProfesionalDeSalud (que gestiona la información de los profesionales) retorna la lista de los horarios laborales del profesional para la fecha consultada (return horariosLaborales: List<TimeRange>) a :AgendarTurnos.
+
+:AgendarTurnos calcula la disponibilidad: Con la lista de horariosLaborales y turnosOcupados, :AgendarTurnos realiza una operación interna (representada por el mensaje a sí mismo) calcularDisponibilidad(horariosLaborales, turnosOcupados). En este paso, se resta los turnos ocupados de los horarios laborales para determinar los bloques de tiempo disponibles.
+
+:AgendarTurnos retorna la disponibilidad calculada: Después de calcular la disponibilidad, :AgendarTurnos envía el mensaje return disponibilidad: List<TimeRange> de vuelta a la :InterfazUsuario. Esta lista de TimeRange representa los intervalos de tiempo en los que el profesional está disponible.
+
+:InterfazUsuario muestra la disponibilidad al usuario: La :InterfazUsuario recibe la información de disponibilidad y la muestra al :Administrativo a través del mensaje mostrarDisponibilidad(disponibilidad: List<TimeRange>).
+
+Fin de la interacción: Las líneas de vida de todos los objetos involucrados en la secuencia terminan, indicando que el proceso de consulta de disponibilidad ha finalizado.
 
 
-* Diagrama de Secuencia - Registrar Nuevo Paciente 
+* Diagrama de Secuencia - Registrar Paciente 
 
-![DDS-RNP](/imagenesDiagramasDeSecuencia/diagramadesecuencia5RegistrarNuevoPaciente.png)
+![DDS-RNP](/imagenesDiagramasDeSecuencia/5.RegistrarPaciente.png)
 
-[Enlace a la imagen de Diagrama de Secuencia - Registrar Nuevo Paciente](https://1drv.ms/i/c/f2bf844ed8279638/EbhKyaddW_pHlvfsSJgGpZ0BViyVYuIjVGo3cZ76vy26wg?e=oilhWx)
+[Enlace a la imagen de Diagrama de Secuencia - Registrar Nuevo Paciente](https://1drv.ms/i/c/f2bf844ed8279638/EVFmJwQgarxHnKzGF7Cc1wIBcXJtTqoJg6rBxyMsuTXtow?e=YGKLd5)
 
 # Descripción del Diagrama de Secuencia: Registrar Nuevo Paciente
 
-Este diagrama de secuencia ilustra el flujo de interacciones entre diferentes participantes del sistema para el caso de uso "Registrar Nuevo Paciente".
+Este diagrama de secuencia describe el proceso de "Registrar Paciente" en un sistema. A continuación, se detalla paso a paso lo que ocurre:
 
-El proceso comienza cuando el **\_01\_Paciente** interactúa con la **\_02\_Interfaz del Sistema** para registrar un nuevo paciente.  El **\_01\_Paciente** envía los "Ingresar Datos" del paciente, que incluyen Nombre, Fecha de Nacimiento, Documento, etc., a la **\_02\_Interfaz del Sistema**.
+:Administrativo inicia el registro de paciente: El proceso comienza cuando el actor o sistema :Administrativo envía el mensaje iniciarRegistroPaciente() a la :InterfazUsuario. Esto indica que un administrativo desea comenzar el proceso para registrar un nuevo paciente.
 
-La **\_02\_Interfaz del Sistema** recibe estos datos y envía un mensaje "registrarPaciente(Nombre=Juan Pérez, FechaNac=1980-05-05, Documento=12345678, ...)" al **\_03\_Sistema** para iniciar el proceso de registro.
+:InterfazUsuario solicita los datos del paciente: La :InterfazUsuario responde al administrativo pidiéndole que proporcione los datos necesarios para el registro a través del mensaje solicitarDatosPaciente(nombre: String, apellido: String, DNI: String, fechaNac: Date, telefono: String, email: String).
 
-El **\_03\_Sistema** recibe estos datos y a su vez, realiza una serie de operaciones. Primero, envía un mensaje "Verificar Documento Único (Documento=12345678)" a la **\_04\_Base de datos (de Pacientes)** para asegurar que no exista otro paciente con el mismo documento.
+:Administrativo ingresa los datos del paciente: El :Administrativo proporciona la información solicitada (nombre, apellido, DNI, fecha de nacimiento, teléfono, email) enviando el mensaje ingresarDatosPaciente(nombre: String, apellido: String, DNI: String, fechaNac: Date, telefono: String, email) a la :InterfazUsuario.
 
-La **\_04\_Base de datos (de Pacientes)** responde con un mensaje "Documento Único" o "Documento Existente" al **\_03\_Sistema**, indicando el resultado de la verificación.  En este diagrama, se asume que el documento es único para continuar con el flujo de registro.
+:InterfazUsuario registra al paciente: Con los datos proporcionados, la :InterfazUsuario envía el mensaje registrarPaciente(datosPaciente) al objeto :GestorPacientes. Esto delega la responsabilidad de registrar al paciente a la clase o módulo GestorPacientes. El parámetro datosPaciente probablemente es un objeto que encapsula toda la información del paciente.
 
-Si el documento es único, el **\_03\_Sistema** procede a guardar la información del paciente. Envía un mensaje "Guardar Paciente (ID=PAC-789, Nombre=Juan Pérez, ...)" a la **\_04\_Base de datos (de Pacientes)**.
+:GestorPacientes verifica si el paciente ya existe: Antes de crear un nuevo paciente, el :GestorPacientes necesita verificar si ya existe un paciente con el mismo DNI para evitar duplicados. Para ello, envía el mensaje existePaciente(DNI: String) al :IPacienteRepository.
 
-La **\_04\_Base de datos (de Pacientes)** confirma la operación enviando un mensaje "Registro Guardado" al **\_03\_Sistema**.
+:IPacienteRepository retorna si el paciente existe: El :IPacienteRepository consulta sus datos y retorna un booleano (return existe: Boolean) a :GestorPacientes indicando si ya existe un paciente con ese DNI.
 
-Finalmente, el **\_03\_Sistema** envía un mensaje "confirmacionRegistro(ID=PAC-789)" a la **\_02\_Interfaz del Sistema**, que contiene el ID único del paciente registrado. La **\_02\_Interfaz del Sistema** recibe esta confirmación y la muestra al paciente (esta última interacción no se representa con una flecha saliente).
+:GestorPacientes crea un nuevo paciente (si no existe):
 
-El diagrama ilustra la secuencia de pasos desde el ingreso de datos del paciente hasta la confirmación del registro, incluyendo la verificación de unicidad y el almacenamiento en la base de datos.
+Si existe es falso (el paciente no existe): :GestorPacientes procede a crear una nueva instancia del objeto Paciente. Esto se representa con el mensaje crear(nombre: String, apellido: DNI, fechaNac: Date, telefono: String, email) enviado al objeto :Paciente.
+El objeto :Paciente recién creado retorna una instancia de sí mismo (return nuevoPaciente: Paciente) a :GestorPacientes.
+:GestorPacientes guarda el nuevo paciente: Una vez que el nuevoPaciente ha sido creado, :GestorPacientes envía el mensaje guardar(nuevoPaciente: Paciente) al :IPacienteRepository. Este repositorio es la interfaz para persistir los datos del paciente (por ejemplo, en una base de datos).
+
+:IPacienteRepository retorna la confirmación de guardado: El :IPacienteRepository guarda el paciente y retorna un booleano (return pacienteGuardado: Boolean) a :GestorPacientes indicando si la operación fue exitosa.
+
+:GestorPacientes notifica el registro exitoso: Asumiendo que el paciente fue guardado exitosamente, :GestorPacientes envía el mensaje notificarRegistroExitoso(idPaciente: String) a la :InterfazUsuario. Esto informa a la interfaz que el registro ha sido completado.
+
+:InterfazUsuario muestra la confirmación al administrativo: Finalmente, la :InterfazUsuario muestra la confirmación del registro al :Administrativo a través del mensaje mostrarConfirmacionRegistro(idPaciente: String).
+
+Fin de la interacción: Las líneas de vida de todos los objetos involucrados en la secuencia terminan, indicando que el proceso de registro del paciente ha finalizado.
